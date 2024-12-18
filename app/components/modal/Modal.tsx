@@ -1,12 +1,29 @@
 import { useState } from "react";
 
-export default function Modal({ task, onClose, onSave }) {
-  const [title, setTitle] = useState(task?.title || ""); // Handles new task title
+interface Task {
+  id?: string;
+  title: string;
+  status: string;
+  completed: boolean;
+}
 
-  const handleSubmit = (e) => {
+interface ModalProps {
+  task?: Task;
+  onClose: () => void;
+  onSave: (task: Task) => void; // Allows creation of new tasks
+}
+
+export default function Modal({ task, onClose, onSave }: ModalProps) {
+  const [title, setTitle] = useState<string>(task?.title || "");
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!title.trim()) return; // Prevent empty submissions
-    onSave({ ...task, title });
+    onSave({
+      ...(task || { id: "", status: "", completed: false }),
+      id: task?.id || String(Date.now()),
+      title,
+    });
   };
 
   return (

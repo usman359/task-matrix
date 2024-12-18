@@ -1,11 +1,11 @@
 "use client";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import AuthForm from "../components/input/AuthForm";
 import { useState } from "react";
-import { auth } from "../lib/firebase/firebase";
 import toast from "react-hot-toast";
+import AuthForm from "../components/input/AuthForm";
 import { useLoading } from "../contexts/LoadingContext";
+import { auth } from "../lib/firebase/firebase";
 
 interface SignupCredentials {
   email: string;

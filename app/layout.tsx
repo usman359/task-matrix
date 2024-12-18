@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "This is a task matrix that helps in your daily task management",
 };
 
-export const poppins = Poppins({
+const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });

@@ -84,15 +84,16 @@ export default function TaskMatrix() {
     setEditTask(null);
   };
 
-  const handleSaveTask = async (task: Task) => {
+  const handleSaveTask = async (task: Partial<Task>) => {
     setIsLoading(true);
     if (!user) return;
 
     const taskRef = ref(db, `users/${user.uid}/tasks/${task.id || Date.now()}`);
-    const newTask = {
-      title: task.title,
+    const newTask: Task = {
+      id: task.id || String(Date.now()),
+      title: task.title || "Untitled Task",
       status: task.status || newTaskStatus,
-      completed: false,
+      completed: task.completed || false,
     };
 
     await set(taskRef, newTask);
@@ -194,7 +195,7 @@ export default function TaskMatrix() {
           {/* Modal for Add or Edit Task */}
           {showModal && (
             <Modal
-              task={editTask}
+              task={editTask || undefined}
               onClose={closeModal}
               onSave={handleSaveTask}
             />
