@@ -5,22 +5,32 @@ import AuthForm from "../components/input/AuthForm";
 import { useState } from "react";
 import { auth } from "../lib/firebase/firebase";
 import toast from "react-hot-toast";
+import { useLoading } from "../contexts/LoadingContext";
+
+interface SignupCredentials {
+  email: string;
+  password: string;
+}
 
 export default function SignupPage() {
   const [error, setError] = useState("");
 
-  const handleSignup = async (credentials) => {
+  const { setIsLoading } = useLoading();
+
+  const handleSignup = async (credentials: SignupCredentials) => {
     const { email, password } = credentials;
 
     try {
+      setIsLoading(true);
       await createUserWithEmailAndPassword(auth, email, password);
       console.log("User registered successfully!");
       toast.success("User registered successfully!");
-    } catch (err) {
-      if (err instanceof Error) {
-        console.error("Signup failed:", err.message);
-        toast.error("Could not create an account. Please try again.");
-      }
+    } catch (error) {
+      console.error("Signup failed:", (error as Error).message);
+      setError((error as Error).message);
+      toast.error("Could not create an account. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
